@@ -8,12 +8,11 @@
         .screen { position: absolute; text-align: center; transition: opacity 1s ease-in-out; width: 90%; }
         input { padding: 15px; border-radius: 25px; border: 1px solid #38bdf8; background: #1e293b; color: white; width: 80%; max-width: 300px; outline: none; margin-top: 20px; font-size: 16px; }
         #name-screen, #ai-screen, #final-screen { display: none; }
-        #response { margin-top: 20px; color: #38bdf8; font-weight: bold; }
+        #response { margin-top: 20px; color: #38bdf8; font-weight: bold; font-size: 1.2em; }
     </style>
 </head>
 <body>
 
-    <!-- الشاشات -->
     <div id="splash" class="screen"><h1>Flash AI</h1></div>
 
     <div id="name-screen" class="screen" style="opacity: 0;">
@@ -57,19 +56,11 @@
             }
         };
 
-        // معالجة السؤال
+        // معالجة السؤال (بدون انتقال تلقائي)
         document.getElementById('aiInput').onkeypress = function(e) {
             if (e.key === 'Enter') {
                 e.preventDefault();
-                document.getElementById('response').innerText = "جاري التحليل... الرد الذكي جاهز!";
-                setTimeout(() => {
-                    document.getElementById('ai-screen').style.opacity = '0';
-                    setTimeout(() => {
-                        document.getElementById('ai-screen').style.display = 'none';
-                        document.getElementById('final-screen').style.display = 'block';
-                        setTimeout(() => document.getElementById('final-screen').style.opacity = '1', 50);
-                    }, 1000);
-                }, 3000); 
+                document.getElementById('response').innerText = "جواب سؤالك: الذكاء الاصطناعي يعمل بشكل ممتاز يا Ablxq9!";
             }
         };
     </script>
