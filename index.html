@@ -2,49 +2,77 @@
 <html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
+    <title>Flash AI</title>
     <style>
         body { margin: 0; background: #0b1120; color: white; font-family: sans-serif; display: flex; justify-content: center; align-items: center; height: 100vh; overflow: hidden; }
         .screen { position: absolute; text-align: center; transition: opacity 1s ease-in-out; width: 100%; }
         input { padding: 15px; border-radius: 25px; border: 1px solid #38bdf8; background: #1e293b; color: white; width: 80%; max-width: 300px; outline: none; margin-top: 20px; }
-        #ai-screen, #final-screen { display: none; }
+        #name-screen, #ai-screen, #final-screen { display: none; }
     </style>
 </head>
 <body>
 
+    <!-- 1. شاشة الشعار -->
     <div id="splash" class="screen">
         <h1>Flash AI</h1>
     </div>
 
+    <!-- 2. شاشة إدخال الاسم -->
     <div id="name-screen" class="screen" style="opacity: 0;">
         <h2>ما هو اسمك؟</h2>
-        <input type="text" id="nameInput" placeholder="اكتب هنا...">
+        <input type="text" id="nameInput" placeholder="اكتب اسمك واضغط Enter...">
     </div>
 
-    <div id="final-screen" class="screen" style="opacity: 0;">
+    <!-- 3. شاشة صندوق الأسئلة -->
+    <div id="ai-screen" class="screen" style="opacity: 0;">
         <h2 id="welcomeMsg"></h2>
-        <a href="https://gsome160-boop.github.io/Flash-AI/" style="color:#38bdf8; font-size: 1.2em;">اضغط هنا للتوجه للرابط</a>
+        <input type="text" id="aiInput" placeholder="اسألني أي سؤال...">
+        <p id="response" style="margin-top: 20px; color: #38bdf8;"></p>
+        <p style="margin-top: 40px; font-size: 0.8em; color: #64748b;">اضغط Enter لتجربة الذكاء الاصطناعي</p>
+    </div>
+
+    <!-- 4. الشاشة النهائية (الرابط) -->
+    <div id="final-screen" class="screen" style="opacity: 0;">
+        <h2>هل أعجبك الأداء؟</h2>
+        <a href="https://gsome160-boop.github.io/Flash-AI/" target="_blank" style="color:#38bdf8; font-size: 1.2em; text-decoration: none;">اضغط هنا للتوجه للموقع الأصلي</a>
     </div>
 
     <script>
-        // الانتقال من البداية للاسم
+        // الانتقال من الشعار للاسم
         setTimeout(() => {
             document.getElementById('splash').style.opacity = '0';
             setTimeout(() => {
                 document.getElementById('splash').style.display = 'none';
-                document.getElementById('name-screen').style.opacity = '1';
+                document.getElementById('name-screen').style.display = 'block';
+                setTimeout(() => document.getElementById('name-screen').style.opacity = '1', 50);
             }, 1000);
         }, 2000);
 
-        // عند كتابة الاسم والضغط على Enter
+        // عند كتابة الاسم
         document.getElementById('nameInput').onkeypress = function(e) {
             if (e.key === 'Enter') {
                 document.getElementById('welcomeMsg').innerText = "أهلاً بك يا " + this.value;
                 document.getElementById('name-screen').style.opacity = '0';
                 setTimeout(() => {
                     document.getElementById('name-screen').style.display = 'none';
-                    document.getElementById('final-screen').style.display = 'block';
-                    document.getElementById('final-screen').style.opacity = '1';
+                    document.getElementById('ai-screen').style.display = 'block';
+                    setTimeout(() => document.getElementById('ai-screen').style.opacity = '1', 50);
                 }, 1000);
+            }
+        };
+
+        // عند كتابة سؤال في صندوق الذكاء الاصطناعي
+        document.getElementById('aiInput').onkeypress = function(e) {
+            if (e.key === 'Enter') {
+                document.getElementById('response').innerText = "جاري تحليل: '" + this.value + "'...";
+                setTimeout(() => {
+                    document.getElementById('ai-screen').style.opacity = '0';
+                    setTimeout(() => {
+                        document.getElementById('ai-screen').style.display = 'none';
+                        document.getElementById('final-screen').style.display = 'block';
+                        setTimeout(() => document.getElementById('final-screen').style.opacity = '1', 50);
+                    }, 1000);
+                }, 2000);
             }
         };
     </script>
