@@ -7,12 +7,17 @@
         body { margin: 0; font-family: 'Segoe UI', sans-serif; background: #0f172a; color: white; display: flex; height: 100vh; }
         #sidebar { width: 250px; background: #1e293b; padding: 20px; border-left: 1px solid #334155; }
         .history-item { padding: 10px; margin-bottom: 5px; background: #334155; border-radius: 5px; cursor: pointer; transition: 0.3s; }
-        .history-item:hover { background: #475569; }
         #main { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; position: relative; }
         #flash-logo { font-size: 50px; font-weight: bold; color: #38bdf8; margin-bottom: 20px; }
         #input-area { width: 80%; max-width: 600px; }
-        #user-input { width: 100%; padding: 15px; border-radius: 25px; border: none; background: #1e293b; color: white; border: 1px solid #334155; }
-        #response-area { margin-top: 20px; padding: 20px; background: #1e293b; border-radius: 10px; width: 80%; max-width: 600px; text-align: center; display: none; border: 1px solid #38bdf8; }
+        input { width: 100%; padding: 15px; border-radius: 25px; border: none; background: #1e293b; color: white; border: 1px solid #334155; outline: none; }
+        
+        /* الرد الاحترافي */
+        #response-area { 
+            margin-top: 20px; padding: 20px; background: #1e293b; border-radius: 15px; 
+            width: 80%; max-width: 600px; text-align: center; 
+            opacity: 0; transition: opacity 0.5s ease-in; /* الترانزيشن هنا */
+        }
     </style>
 </head>
 <body>
@@ -25,7 +30,7 @@
     <div id="main">
         <div id="flash-logo">Flash AI</div>
         <div id="input-area">
-            <input type="text" id="user-input" placeholder="اسألني أي شيء..." onkeypress="handleEnter(event)">
+            <input type="text" id="user-input" placeholder="اكتب سؤالك هنا..." onkeypress="handleEnter(event)">
         </div>
         <div id="response-area"></div>
     </div>
@@ -37,27 +42,25 @@
                 const text = input.value;
                 if (text.trim() !== "") {
                     saveToHistory(text);
-                    generateResponse(text); 
+                    showResponse(text); // الرد الفوري
                     input.value = "";
                 }
             }
         }
 
-        async function generateResponse(query) {
+        function showResponse(query) {
             const resArea = document.getElementById('response-area');
-            resArea.style.display = 'block';
-            resArea.innerText = "جاري البحث في الإنترنت... 🔍";
-
-            // محاكاة للذكاء الاصطناعي (هنا نضع المنطق)
-            setTimeout(() => {
-                let answer = "";
-                if (query.includes("مصمم") || query.includes("صممك")) {
-                    answer = "المصمم والمبرمج العبقري هو أبوالقاسم البشرى! 👨‍💻✨";
-                } else {
-                    answer = "أهلاً بك يا Ablxq9! لقد وجدت إجابة لسؤالك: '" + query + "'. استمر في البرمجة فأنت في الطريق الصحيح! 🚀🔥";
-                }
-                resArea.innerText = answer;
-            }, 1500); // تأخير بسيط لمحاكاة سرعة البحث
+            resArea.style.opacity = '1'; // إظهار الترانزيشن
+            
+            let answer = "";
+            // الرد الخاص بالمصمم
+            if (query.includes("مصمم") || query.includes("مُصمم")) {
+                answer = "أهلاً يا بطل! 🚀 المصمم والمبرمج العبقري هو المبدع: **أبوالقاسم البشرى** 👨‍💻✨.";
+            } else {
+                answer = "سؤال ذكي يا Ablxq9! 🔥 بناءً على البيانات، جواب سؤالك هو: '" + query + "' يمثل انطلاقة قوية في مشروعك! 💡";
+            }
+            
+            resArea.innerText = answer;
         }
 
         function saveToHistory(text) {
