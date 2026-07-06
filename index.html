@@ -11,7 +11,8 @@
         #main { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; position: relative; }
         #flash-logo { font-size: 50px; font-weight: bold; color: #38bdf8; margin-bottom: 20px; }
         #input-area { width: 80%; max-width: 600px; }
-        input { width: 100%; padding: 15px; border-radius: 25px; border: none; background: #1e293b; color: white; outline: none; border: 1px solid #334155; }
+        #user-input { width: 100%; padding: 15px; border-radius: 25px; border: none; background: #1e293b; color: white; border: 1px solid #334155; }
+        #response-area { margin-top: 20px; padding: 20px; background: #1e293b; border-radius: 10px; width: 80%; max-width: 600px; text-align: center; display: none; border: 1px solid #38bdf8; }
     </style>
 </head>
 <body>
@@ -24,26 +25,42 @@
     <div id="main">
         <div id="flash-logo">Flash AI</div>
         <div id="input-area">
-            <input type="text" id="user-input" placeholder="اكتب استفسارك هنا واضغط Enter..." onkeypress="handleEnter(event)">
+            <input type="text" id="user-input" placeholder="اسألني أي شيء..." onkeypress="handleEnter(event)">
         </div>
+        <div id="response-area"></div>
     </div>
 
     <script>
-        // السكربت البرمجي (المنطق)
         function handleEnter(event) {
             if (event.key === 'Enter') {
                 const input = document.getElementById('user-input');
                 const text = input.value;
                 if (text.trim() !== "") {
                     saveToHistory(text);
+                    generateResponse(text); 
                     input.value = "";
-                    alert("جاري المعالجة بواسطة Flash AI: " + text); // هنا مستقبلاً تربط الـ API
                 }
             }
         }
 
+        async function generateResponse(query) {
+            const resArea = document.getElementById('response-area');
+            resArea.style.display = 'block';
+            resArea.innerText = "جاري البحث في الإنترنت... 🔍";
+
+            // محاكاة للذكاء الاصطناعي (هنا نضع المنطق)
+            setTimeout(() => {
+                let answer = "";
+                if (query.includes("مصمم") || query.includes("صممك")) {
+                    answer = "المصمم والمبرمج العبقري هو أبوالقاسم البشرى! 👨‍💻✨";
+                } else {
+                    answer = "أهلاً بك يا Ablxq9! لقد وجدت إجابة لسؤالك: '" + query + "'. استمر في البرمجة فأنت في الطريق الصحيح! 🚀🔥";
+                }
+                resArea.innerText = answer;
+            }, 1500); // تأخير بسيط لمحاكاة سرعة البحث
+        }
+
         function saveToHistory(text) {
-            // حفظ في ذاكرة المتصفح المحلية (LocalStorage)
             let history = JSON.parse(localStorage.getItem('flash_history') || "[]");
             history.push(text);
             localStorage.setItem('flash_history', JSON.stringify(history));
@@ -53,8 +70,7 @@
         function renderHistory() {
             const list = document.getElementById('history-list');
             list.innerHTML = "";
-            const history = JSON.parse(localStorage.getItem('flash_history') || "[]");
-            history.forEach(item => {
+            JSON.parse(localStorage.getItem('flash_history') || "[]").forEach(item => {
                 const div = document.createElement('div');
                 div.className = 'history-item';
                 div.innerText = item;
@@ -62,7 +78,6 @@
             });
         }
 
-        // تحميل السجلات عند فتح الموقع
         window.onload = renderHistory;
     </script>
 </body>
