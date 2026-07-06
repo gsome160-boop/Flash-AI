@@ -4,50 +4,48 @@
     <meta charset="UTF-8">
     <style>
         body { margin: 0; background: #0b1120; color: white; font-family: sans-serif; display: flex; justify-content: center; align-items: center; height: 100vh; overflow: hidden; }
-        .screen { position: absolute; text-align: center; transition: opacity 1.5s ease-in-out; width: 100%; }
-        .title { font-size: 3em; margin-bottom: 10px; }
-        .subtitle { font-size: 1.5em; color: #94a3b8; }
-        .deploy-link { font-size: 1.2em; color: #38bdf8; text-decoration: none; word-break: break-all; }
-        #final-screen { display: none; }
+        .screen { position: absolute; text-align: center; transition: opacity 1s ease-in-out; width: 100%; }
+        input { padding: 15px; border-radius: 25px; border: 1px solid #38bdf8; background: #1e293b; color: white; width: 80%; max-width: 300px; outline: none; margin-top: 20px; }
+        #ai-screen, #final-screen { display: none; }
     </style>
 </head>
 <body>
 
-    <!-- شاشة البداية (الشعار والاسم) -->
     <div id="splash" class="screen">
-        <img src="logo.png" width="200" onerror="this.style.display='none'">
-        <div class="title">Flash AI</div>
-        <div class="subtitle">السرعة القصوى في عالم الذكاء الاصطناعي</div>
+        <h1>Flash AI</h1>
     </div>
 
-    <!-- الشاشة النهائية (تظهر بعد اختفاء شاشة البداية) -->
+    <div id="name-screen" class="screen" style="opacity: 0;">
+        <h2>ما هو اسمك؟</h2>
+        <input type="text" id="nameInput" placeholder="اكتب هنا...">
+    </div>
+
     <div id="final-screen" class="screen" style="opacity: 0;">
-        <h2>تم بنجاح نشر المشروع على الرابط التالي:</h2>
-        <!-- الرابط الخاص بك مدمج هنا -->
-        <a href="https://gsome160-boop.github.io/Flash-AI/" class="deploy-link" target="_blank">
-            https://gsome160-boop.github.io/Flash-AI/
-        </a>
-        <p style="margin-top: 20px; color: #64748b;">(اضغط على الرابط لفتحه في نافذة جديدة)</p>
+        <h2 id="welcomeMsg"></h2>
+        <a href="https://gsome160-boop.github.io/Flash-AI/" style="color:#38bdf8; font-size: 1.2em;">اضغط هنا للتوجه للرابط</a>
     </div>
 
     <script>
-        window.onload = () => {
-            // بعد تحميل الصفحة بـ 3 ثوانٍ، تبدأ عملية الانتقال
+        // الانتقال من البداية للاسم
+        setTimeout(() => {
+            document.getElementById('splash').style.opacity = '0';
             setTimeout(() => {
-                const splash = document.getElementById('splash');
-                splash.style.opacity = '0';
-                
-                // بعد انتهاء التلاشي (1.5s)، يتم إخفاء الشاشة الأولى وإظهار الثانية
+                document.getElementById('splash').style.display = 'none';
+                document.getElementById('name-screen').style.opacity = '1';
+            }, 1000);
+        }, 2000);
+
+        // عند كتابة الاسم والضغط على Enter
+        document.getElementById('nameInput').onkeypress = function(e) {
+            if (e.key === 'Enter') {
+                document.getElementById('welcomeMsg').innerText = "أهلاً بك يا " + this.value;
+                document.getElementById('name-screen').style.opacity = '0';
                 setTimeout(() => {
-                    splash.style.display = 'none';
-                    const finalScreen = document.getElementById('final-screen');
-                    finalScreen.style.display = 'block';
-                    // تفعيل التلاشي للظهور
-                    setTimeout(() => {
-                        finalScreen.style.opacity = '1';
-                    }, 50);
-                }, 1500);
-            }, 3000);
+                    document.getElementById('name-screen').style.display = 'none';
+                    document.getElementById('final-screen').style.display = 'block';
+                    document.getElementById('final-screen').style.opacity = '1';
+                }, 1000);
+            }
         };
     </script>
 </body>
