@@ -13,6 +13,7 @@
 </head>
 <body>
 
+    <!-- الشاشات -->
     <div id="splash" class="screen"><h1>Flash AI</h1></div>
 
     <div id="name-screen" class="screen" style="opacity: 0;">
@@ -32,6 +33,7 @@
     </div>
 
     <script>
+        // الانتقال من الشعار للاسم
         setTimeout(() => {
             document.getElementById('splash').style.opacity = '0';
             setTimeout(() => {
@@ -41,6 +43,7 @@
             }, 1000);
         }, 2000);
 
+        // معالجة الاسم
         document.getElementById('nameInput').onkeypress = function(e) {
             if (e.key === 'Enter') {
                 e.preventDefault();
@@ -54,6 +57,7 @@
             }
         };
 
+        // معالجة السؤال
         document.getElementById('aiInput').onkeypress = function(e) {
             if (e.key === 'Enter') {
                 e.preventDefault();
