@@ -4,19 +4,20 @@
     <meta charset="UTF-8">
     <style>
         body { margin: 0; background: #0b1120; color: white; font-family: sans-serif; display: flex; justify-content: center; align-items: center; height: 100vh; overflow: hidden; }
-        .screen { position: absolute; text-align: center; transition: opacity 1s; }
-        input { padding: 15px; border-radius: 25px; border: 1px solid #38bdf8; background: #1e293b; color: white; width: 300px; outline: none; }
-        #ai-screen { display: none; width: 80%; }
+        .screen { position: absolute; text-align: center; transition: opacity 1s ease-in-out; width: 100%; }
+        input { padding: 15px; border-radius: 25px; border: 1px solid #38bdf8; background: #1e293b; color: white; width: 80%; max-width: 300px; outline: none; margin-top: 20px; }
+        #ai-screen { display: none; }
     </style>
 </head>
 <body>
 
     <div id="splash" class="screen">
-        <img src="watermarked_img_14213142942207674268.png" width="200">
+        <!-- تأكد أن اسم الملف مطابق تماماً لهذا الاسم -->
+        <img src="watermarked_img_14213142942207674268.png" width="200" onerror="this.style.display='none'">
         <h1>Flash AI</h1>
     </div>
 
-    <div id="name-screen" class="screen" style="opacity: 0;">
+    <div id="name-screen" class="screen" style="opacity: 0; visibility: hidden;">
         <h2>ما هو اسمك؟</h2>
         <input type="text" id="nameInput" placeholder="اكتب هنا...">
     </div>
@@ -24,30 +25,32 @@
     <div id="ai-screen" class="screen" style="opacity: 0;">
         <h2 id="welcomeMsg"></h2>
         <input type="text" id="aiInput" placeholder="اسألني هنا...">
-        <p id="response"></p>
+        <p id="response" style="margin-top: 20px; color: #38bdf8;"></p>
     </div>
 
     <script>
-        const splash = document.getElementById('splash');
-        const nameScreen = document.getElementById('name-screen');
-        const aiScreen = document.getElementById('ai-screen');
-
-        setTimeout(() => {
-            splash.style.opacity = '0';
+        window.onload = () => {
             setTimeout(() => {
-                splash.style.display = 'none';
-                nameScreen.style.opacity = '1';
-            }, 1000);
-        }, 2000);
+                document.getElementById('splash').style.opacity = '0';
+                setTimeout(() => {
+                    document.getElementById('splash').style.display = 'none';
+                    const ns = document.getElementById('name-screen');
+                    ns.style.visibility = 'visible';
+                    ns.style.opacity = '1';
+                }, 1000);
+            }, 2000);
+        };
 
         document.getElementById('nameInput').onkeypress = function(e) {
             if (e.key === 'Enter') {
                 const name = this.value;
-                nameScreen.style.opacity = '0';
+                const ns = document.getElementById('name-screen');
+                ns.style.opacity = '0';
                 setTimeout(() => {
-                    nameScreen.style.display = 'none';
-                    aiScreen.style.display = 'block';
-                    aiScreen.style.opacity = '1';
+                    ns.style.display = 'none';
+                    const ai = document.getElementById('ai-screen');
+                    ai.style.display = 'block';
+                    ai.style.opacity = '1';
                     document.getElementById('welcomeMsg').innerText = "أهلاً بك يا " + name;
                 }, 1000);
             }
@@ -55,7 +58,7 @@
 
         document.getElementById('aiInput').onkeypress = function(e) {
             if (e.key === 'Enter') {
-                document.getElementById('response').innerText = "سؤالك " + this.value + " تحليل عبقري يا بطل!";
+                document.getElementById('response').innerText = "تحليل ذكي لسؤالك '" + this.value + "' يا بطل!";
                 this.value = "";
             }
         };
