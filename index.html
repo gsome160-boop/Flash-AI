@@ -6,61 +6,58 @@
     <style>
         body { margin: 0; font-family: 'Segoe UI', sans-serif; background: #0f172a; color: white; display: flex; height: 100vh; }
         #sidebar { width: 250px; background: #1e293b; padding: 20px; border-left: 1px solid #334155; }
-        .history-item { padding: 10px; margin-bottom: 5px; background: #334155; border-radius: 5px; cursor: pointer; transition: 0.3s; }
-        #main { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; position: relative; }
-        #flash-logo { font-size: 50px; font-weight: bold; color: #38bdf8; margin-bottom: 20px; }
-        #input-area { width: 80%; max-width: 600px; }
-        input { width: 100%; padding: 15px; border-radius: 25px; border: none; background: #1e293b; color: white; border: 1px solid #334155; outline: none; }
+        .history-item { padding: 10px; margin-bottom: 5px; background: #334155; border-radius: 5px; cursor: pointer; }
+        #main { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+        #flash-logo { font-size: 40px; font-weight: bold; color: #38bdf8; margin-bottom: 20px; }
+        input { width: 80%; max-width: 500px; padding: 15px; border-radius: 25px; border: 1px solid #38bdf8; background: #1e293b; color: white; outline: none; }
         
-        /* الرد الاحترافي */
+        /* هذا هو كود الترانزيشن المكتوب */
         #response-area { 
             margin-top: 20px; padding: 20px; background: #1e293b; border-radius: 15px; 
-            width: 80%; max-width: 600px; text-align: center; 
-            opacity: 0; transition: opacity 0.5s ease-in; /* الترانزيشن هنا */
+            width: 80%; max-width: 600px; text-align: center; display: none; 
+            border: 1px solid #38bdf8; 
+            opacity: 0; 
+            transition: opacity 1s ease-in-out; /* هنا الترانزيشن */
         }
     </style>
 </head>
 <body>
-
     <div id="sidebar">
-        <h3>السجلات القديمة</h3>
+        <h3>سجل المحادثات</h3>
         <div id="history-list"></div>
     </div>
-
     <div id="main">
         <div id="flash-logo">Flash AI</div>
-        <div id="input-area">
-            <input type="text" id="user-input" placeholder="اكتب سؤالك هنا..." onkeypress="handleEnter(event)">
-        </div>
+        <input type="text" id="user-input" placeholder="اكتب اسمك للبدء..." onkeypress="handleInput(event)">
         <div id="response-area"></div>
     </div>
 
     <script>
-        function handleEnter(event) {
+        let userName = "";
+
+        function handleInput(event) {
             if (event.key === 'Enter') {
                 const input = document.getElementById('user-input');
-                const text = input.value;
-                if (text.trim() !== "") {
-                    saveToHistory(text);
-                    showResponse(text); // الرد الفوري
-                    input.value = "";
-                }
-            }
-        }
+                const text = input.value.trim();
+                const resArea = document.getElementById('response-area');
+                
+                if (text === "") return;
 
-        function showResponse(query) {
-            const resArea = document.getElementById('response-area');
-            resArea.style.opacity = '1'; // إظهار الترانزيشن
-            
-            let answer = "";
-            // الرد الخاص بالمصمم
-            if (query.includes("مصمم") || query.includes("مُصمم")) {
-                answer = "أهلاً يا بطل! 🚀 المصمم والمبرمج العبقري هو المبدع: **أبوالقاسم البشرى** 👨‍💻✨.";
-            } else {
-                answer = "سؤال ذكي يا Ablxq9! 🔥 بناءً على البيانات، جواب سؤالك هو: '" + query + "' يمثل انطلاقة قوية في مشروعك! 💡";
+                if (userName === "") {
+                    userName = text;
+                    resArea.style.display = 'block';
+                    resArea.innerText = "أهلاً بك يا " + userName + "! أنا Flash AI، صمم هذا النظام المبدع: أبوالقاسم البشرى. كيف يمكنني مساعدتك اليوم؟";
+                    input.placeholder = "اسألني أي شيء...";
+                } else {
+                    saveToHistory(text);
+                    resArea.style.opacity = '0'; // إخفاء للبدء بالترانزيشن
+                    setTimeout(() => {
+                        resArea.innerText = "سؤال ممتاز يا " + userName + "! بصفتك ضيف المبرمج 'أبوالقاسم'، أقول لك: هذا المشروع هو بداية انطلاقة قوية. 🔥";
+                        resArea.style.opacity = '1'; // تفعيل الترانزيشن
+                    }, 100);
+                }
+                input.value = "";
             }
-            
-            resArea.innerText = answer;
         }
 
         function saveToHistory(text) {
@@ -80,7 +77,6 @@
                 list.appendChild(div);
             });
         }
-
         window.onload = renderHistory;
     </script>
 </body>
