@@ -2,82 +2,63 @@
 <html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <title>Flash AI</title>
     <style>
-        body { margin: 0; font-family: 'Segoe UI', sans-serif; background: #0f172a; color: white; display: flex; height: 100vh; }
-        #sidebar { width: 250px; background: #1e293b; padding: 20px; border-left: 1px solid #334155; }
-        .history-item { padding: 10px; margin-bottom: 5px; background: #334155; border-radius: 5px; cursor: pointer; }
-        #main { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; }
-        #flash-logo { font-size: 40px; font-weight: bold; color: #38bdf8; margin-bottom: 20px; }
-        input { width: 80%; max-width: 500px; padding: 15px; border-radius: 25px; border: 1px solid #38bdf8; background: #1e293b; color: white; outline: none; }
-        
-        /* هذا هو كود الترانزيشن المكتوب */
-        #response-area { 
-            margin-top: 20px; padding: 20px; background: #1e293b; border-radius: 15px; 
-            width: 80%; max-width: 600px; text-align: center; display: none; 
-            border: 1px solid #38bdf8; 
-            opacity: 0; 
-            transition: opacity 1s ease-in-out; /* هنا الترانزيشن */
-        }
+        body { margin: 0; background: #0b1120; color: white; font-family: sans-serif; display: flex; justify-content: center; align-items: center; height: 100vh; overflow: hidden; }
+        .screen { position: absolute; text-align: center; transition: opacity 1s; }
+        input { padding: 15px; border-radius: 25px; border: 1px solid #38bdf8; background: #1e293b; color: white; width: 300px; outline: none; }
+        #ai-screen { display: none; width: 80%; }
     </style>
 </head>
 <body>
-    <div id="sidebar">
-        <h3>سجل المحادثات</h3>
-        <div id="history-list"></div>
+
+    <div id="splash" class="screen">
+        <img src="watermarked_img_14213142942207674268.png" width="200">
+        <h1>Flash AI</h1>
     </div>
-    <div id="main">
-        <div id="flash-logo">Flash AI</div>
-        <input type="text" id="user-input" placeholder="اكتب اسمك للبدء..." onkeypress="handleInput(event)">
-        <div id="response-area"></div>
+
+    <div id="name-screen" class="screen" style="opacity: 0;">
+        <h2>ما هو اسمك؟</h2>
+        <input type="text" id="nameInput" placeholder="اكتب هنا...">
+    </div>
+
+    <div id="ai-screen" class="screen" style="opacity: 0;">
+        <h2 id="welcomeMsg"></h2>
+        <input type="text" id="aiInput" placeholder="اسألني هنا...">
+        <p id="response"></p>
     </div>
 
     <script>
-        let userName = "";
+        const splash = document.getElementById('splash');
+        const nameScreen = document.getElementById('name-screen');
+        const aiScreen = document.getElementById('ai-screen');
 
-        function handleInput(event) {
-            if (event.key === 'Enter') {
-                const input = document.getElementById('user-input');
-                const text = input.value.trim();
-                const resArea = document.getElementById('response-area');
-                
-                if (text === "") return;
+        setTimeout(() => {
+            splash.style.opacity = '0';
+            setTimeout(() => {
+                splash.style.display = 'none';
+                nameScreen.style.opacity = '1';
+            }, 1000);
+        }, 2000);
 
-                if (userName === "") {
-                    userName = text;
-                    resArea.style.display = 'block';
-                    resArea.innerText = "أهلاً بك يا " + userName + "! أنا Flash AI، صمم هذا النظام المبدع: أبوالقاسم البشرى. كيف يمكنني مساعدتك اليوم؟";
-                    input.placeholder = "اسألني أي شيء...";
-                } else {
-                    saveToHistory(text);
-                    resArea.style.opacity = '0'; // إخفاء للبدء بالترانزيشن
-                    setTimeout(() => {
-                        resArea.innerText = "سؤال ممتاز يا " + userName + "! بصفتك ضيف المبرمج 'أبوالقاسم'، أقول لك: هذا المشروع هو بداية انطلاقة قوية. 🔥";
-                        resArea.style.opacity = '1'; // تفعيل الترانزيشن
-                    }, 100);
-                }
-                input.value = "";
+        document.getElementById('nameInput').onkeypress = function(e) {
+            if (e.key === 'Enter') {
+                const name = this.value;
+                nameScreen.style.opacity = '0';
+                setTimeout(() => {
+                    nameScreen.style.display = 'none';
+                    aiScreen.style.display = 'block';
+                    aiScreen.style.opacity = '1';
+                    document.getElementById('welcomeMsg').innerText = "أهلاً بك يا " + name;
+                }, 1000);
             }
-        }
+        };
 
-        function saveToHistory(text) {
-            let history = JSON.parse(localStorage.getItem('flash_history') || "[]");
-            history.push(text);
-            localStorage.setItem('flash_history', JSON.stringify(history));
-            renderHistory();
-        }
-
-        function renderHistory() {
-            const list = document.getElementById('history-list');
-            list.innerHTML = "";
-            JSON.parse(localStorage.getItem('flash_history') || "[]").forEach(item => {
-                const div = document.createElement('div');
-                div.className = 'history-item';
-                div.innerText = item;
-                list.appendChild(div);
-            });
-        }
-        window.onload = renderHistory;
+        document.getElementById('aiInput').onkeypress = function(e) {
+            if (e.key === 'Enter') {
+                document.getElementById('response').innerText = "سؤالك " + this.value + " تحليل عبقري يا بطل!";
+                this.value = "";
+            }
+        };
     </script>
 </body>
 </html>
